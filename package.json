@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "test": "vitest run --reporter=json --outputFile=test-results.json && tsx dashboard/generate-dashboard.ts",
+    "test": "vitest run --reporter=json --outputFile=reports/test-results.json && tsx dashboard/generate-dashboard.ts",
     "test:ui": "vitest --ui",
     "test:watch": "vitest"
   },

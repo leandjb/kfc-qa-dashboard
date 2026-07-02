@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -17,6 +17,7 @@ interface SuiteResult {
 }
 
 interface VitestJsonReport {
+  startTime: number
   numTotalTests: number
   numPassedTests: number
   numFailedTests: number
@@ -39,14 +40,8 @@ function mapTestToCategory(name: string): string {
   return 'Other'
 }
 
-function generateDashboard(reportPath: string, outputPath: string): void {
-  if (!existsSync(reportPath)) {
-    writeFileSync(outputPath, '<html><body><h1>No test results found. Run "pnpm test" first.</h1></body></html>')
-    return
-  }
-
-  const raw = readFileSync(reportPath, 'utf-8')
-  const report: VitestJsonReport = JSON.parse(raw)
+function generateDashboard(report: VitestJsonReport, outputPath: string): void {
+  const startTime = new Date(report.startTime).toLocaleString()
 
   let passedCount = 0
   let failedCount = 0
@@ -188,7 +183,7 @@ function generateDashboard(reportPath: string, outputPath: string): void {
 <body>
   <div class="container">
     <h1>QA Test Dashboard</h1>
-    <p class="date">Generated: ${new Date().toLocaleString()} | Target: saucedemo.com</p>
+    <p class="date">Generated: ${new Date().toLocaleString()} | Test run started: ${startTime} | Target: saucedemo.com</p>
 
     <div class="summary">
       <div class="summary-card total">
@@ -244,6 +239,16 @@ function escapeHtml(text: string): string {
     .replace(/'/g, '&#039;')
 }
 
-const reportPath = resolve(__dirname, '..', 'test-results.json')
-const outputPath = resolve(__dirname, '..', 'dashboard.html')
-generateDashboard(reportPath, outputPath)
+const reportsDir = resolve(__dirname, '..', 'reports')
+const reportPath = resolve(reportsDir, 'test-results.json')
+
+if (!existsSync(reportsDir)) {
+  mkdirSync(reportsDir, { recursive: true })
+}
+
+const raw = readFileSync(reportPath, 'utf-8')
+const report: VitestJsonReport = JSON.parse(raw)
+const timestamp = new Date(report.startTime).toISOString().replace(/[:.]/g, '-')
+const outputPath = resolve(reportsDir, `dashboard-${timestamp}.html`)
+
+generateDashboard(report, outputPath)

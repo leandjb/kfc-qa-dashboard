@@ -8,7 +8,7 @@ export default defineConfig({
     pool: 'forks',
     reporters: [
       'default',
-      ['json', { outputFile: 'test-results.json' }],
+      ['json', { outputFile: 'reports/test-results.json' }],
     ],
     env: {
       NODE_ENV: 'test',
