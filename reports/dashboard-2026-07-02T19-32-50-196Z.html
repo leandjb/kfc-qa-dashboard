@@ -75,6 +75,25 @@
     }
     tr:last-child td { border-bottom: none; }
     tr:hover { background: #f8f9ff; }
+    tr.has-error { cursor: pointer; }
+    tr.has-error:hover { background: #fef2f2; }
+    .details-cell { text-align: center; font-size: 13px; color: #888; }
+    .error-detail td {
+      padding: 0;
+      background: #1e1e2e;
+      border-bottom: 2px solid #ef4444;
+    }
+    .error-pre {
+      margin: 0;
+      padding: 16px 20px;
+      color: #f87171;
+      font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+      overflow-x: auto;
+    }
     .test-id {
       font-family: 'SF Mono', 'Cascadia Code', monospace;
       font-size: 13px;
@@ -105,7 +124,7 @@
 <body>
   <div class="container">
     <h1>QA Test Dashboard</h1>
-    <p class="date">Generated: 7/2/2026, 2:04:50 PM | Test run started: 7/2/2026, 2:04:43 PM | Target: saucedemo.com</p>
+    <p class="date">Generated: 7/2/2026, 2:32:58 PM | Test run started: 7/2/2026, 2:32:50 PM | Target: saucedemo.com</p>
 
     <div class="summary">
       <div class="summary-card total">
@@ -113,19 +132,19 @@
         <div class="label">Total Tests</div>
       </div>
       <div class="summary-card passed">
-        <div class="value">8</div>
+        <div class="value">7</div>
         <div class="label">Passed</div>
       </div>
       <div class="summary-card failed">
-        <div class="value">0</div>
+        <div class="value">1</div>
         <div class="label">Failed</div>
       </div>
       <div class="summary-card rate">
-        <div class="value">100.0%</div>
+        <div class="value">87.5%</div>
         <div class="label">Pass Rate</div>
       </div>
       <div class="summary-card time">
-        <div class="value">20.9s</div>
+        <div class="value">25.1s</div>
         <div class="label">Total Time</div>
       </div>
     </div>
@@ -138,68 +157,100 @@
           <th>Test</th>
           <th>Status</th>
           <th>Duration</th>
+          <th>Errors</th>
         </tr>
       </thead>
       <tbody>
         
-        <tr class="pass">
+        <tr class="pass" >
           <td class="test-id">M-CHK-001</td>
           <td>Checkout</td>
           <td class="test-desc">Add to cart updates badge number</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">2.7s</td>
+          <td class="duration">3.3s</td>
+          <td class="details-cell">—</td>
         </tr>
-        <tr class="pass">
+        
+        <tr class="pass" >
           <td class="test-id">M-CHK-002</td>
           <td>Checkout</td>
           <td class="test-desc">Full checkout flow completes successfully</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">3.0s</td>
+          <td class="duration">3.6s</td>
+          <td class="details-cell">—</td>
         </tr>
-        <tr class="pass">
+        
+        <tr class="pass" >
           <td class="test-id">M-INV-001</td>
           <td>Inventory</td>
           <td class="test-desc">Inventory page displays 6 products</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">2.6s</td>
+          <td class="duration">3.2s</td>
+          <td class="details-cell">—</td>
         </tr>
-        <tr class="pass">
+        
+        <tr class="pass" >
           <td class="test-id">M-INV-002</td>
           <td>Inventory</td>
           <td class="test-desc">Sort by price low to high returns ascending order</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">2.7s</td>
+          <td class="duration">3.1s</td>
+          <td class="details-cell">—</td>
         </tr>
-        <tr class="pass">
+        
+        <tr class="fail has-error" onclick="toggleError(0)">
           <td class="test-id">M-LOG-001</td>
           <td>Login</td>
           <td class="test-desc">Standard user login redirects to product page</td>
-          <td class="status">&#10004; PASS</td>
-          <td class="duration">2.5s</td>
+          <td class="status">&#10008; FAIL</td>
+          <td class="duration">3.3s</td>
+          <td class="details-cell">&#9654;</td>
         </tr>
-        <tr class="pass">
+        
+        <tr id="error-0" class="error-detail" style="display:none">
+          <td colspan="6"><pre class="error-pre">AssertionError: expected &#039;https://www.saucedemo.com/&#039; to contain &#039;/inventory.html&#039;
+    at P:/node/kfc-qa-dashboard/tests/sauce-demo/login.spec.ts:17:15
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at file:///P:/node/kfc-qa-dashboard/node_modules/.pnpm/@vitest+runner@4.1.9/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20</pre></td>
+        </tr>
+        <tr class="pass" >
           <td class="test-id">M-LOG-002</td>
           <td>Login</td>
           <td class="test-desc">Locked-out user shows correct error message</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">2.3s</td>
+          <td class="duration">2.5s</td>
+          <td class="details-cell">—</td>
         </tr>
-        <tr class="pass">
+        
+        <tr class="pass" >
           <td class="test-id">M-LOG-003</td>
           <td>Login</td>
           <td class="test-desc">Wrong password shows generic error without leaking account existence</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">1.7s</td>
+          <td class="duration">1.9s</td>
+          <td class="details-cell">—</td>
         </tr>
-        <tr class="pass">
+        
+        <tr class="pass" >
           <td class="test-id">M-NAV-001</td>
           <td>Navigation</td>
           <td class="test-desc">Mobile menu opens and displays navigation items</td>
           <td class="status">&#10004; PASS</td>
-          <td class="duration">3.4s</td>
+          <td class="duration">4.2s</td>
+          <td class="details-cell">—</td>
         </tr>
+        
       </tbody>
     </table>
   </div>
+  <script>
+    function toggleError(idx) {
+      const row = document.getElementById('error-' + idx)
+      if (row) {
+        const isHidden = row.style.display === 'none' || row.style.display === ''
+        row.style.display = isHidden ? 'table-row' : 'none'
+      }
+    }
+  </script>
 </body>
 </html>

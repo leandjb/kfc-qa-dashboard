@@ -9,6 +9,7 @@ interface AssertionResult {
   title: string
   status: 'passed' | 'failed'
   duration: number
+  failureMessages: string[]
 }
 
 interface SuiteResult {
@@ -48,6 +49,8 @@ function generateDashboard(report: VitestJsonReport, outputPath: string): void {
   let totalDuration = 0
   const rows: string[] = []
 
+  let errorIdx = 0
+
   for (const suite of report.testResults) {
     for (const test of suite.assertionResults) {
       const { id, description } = parseTestId(test.fullName)
@@ -56,19 +59,35 @@ function generateDashboard(report: VitestJsonReport, outputPath: string): void {
       const statusClass = test.status === 'passed' ? 'pass' : 'fail'
       const icon = test.status === 'passed' ? '&#10004;' : '&#10008;'
       const duration = (test.duration / 1000).toFixed(1)
+      const isFailed = test.status === 'failed'
 
-      if (test.status === 'passed') passedCount++
-      else failedCount++
+      if (isFailed) failedCount++
+      else passedCount++
       totalDuration += test.duration
 
+      const errorHtml = isFailed ? test.failureMessages
+        .filter(m => m)
+        .map(m => escapeHtml(m))
+        .join('\n\n---\n\n') : ''
+
+      const currentErrorIdx = errorIdx
+      if (isFailed) errorIdx++
+
+      const onClick = isFailed ? `onclick="toggleError(${currentErrorIdx})"` : ''
+
       rows.push(`
-        <tr class="${statusClass}">
+        <tr class="${statusClass}${isFailed ? ' has-error' : ''}" ${onClick}>
           <td class="test-id">${id || '—'}</td>
           <td>${category}</td>
           <td class="test-desc">${escapeHtml(description)}</td>
           <td class="status">${icon} ${statusLabel}</td>
           <td class="duration">${duration}s</td>
-        </tr>`)
+          <td class="details-cell">${isFailed ? '&#9654;' : '—'}</td>
+        </tr>
+        ${isFailed ? `
+        <tr id="error-${currentErrorIdx}" class="error-detail" style="display:none">
+          <td colspan="6"><pre class="error-pre">${errorHtml}</pre></td>
+        </tr>` : ''}`)
     }
   }
 
@@ -153,6 +172,25 @@ function generateDashboard(report: VitestJsonReport, outputPath: string): void {
     }
     tr:last-child td { border-bottom: none; }
     tr:hover { background: #f8f9ff; }
+    tr.has-error { cursor: pointer; }
+    tr.has-error:hover { background: #fef2f2; }
+    .details-cell { text-align: center; font-size: 13px; color: #888; }
+    .error-detail td {
+      padding: 0;
+      background: #1e1e2e;
+      border-bottom: 2px solid #ef4444;
+    }
+    .error-pre {
+      margin: 0;
+      padding: 16px 20px;
+      color: #f87171;
+      font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+      overflow-x: auto;
+    }
     .test-id {
       font-family: 'SF Mono', 'Cascadia Code', monospace;
       font-size: 13px;
@@ -216,6 +254,7 @@ function generateDashboard(report: VitestJsonReport, outputPath: string): void {
           <th>Test</th>
           <th>Status</th>
           <th>Duration</th>
+          <th>Errors</th>
         </tr>
       </thead>
       <tbody>
@@ -223,6 +262,15 @@ function generateDashboard(report: VitestJsonReport, outputPath: string): void {
       </tbody>
     </table>
   </div>
+  <script>
+    function toggleError(idx) {
+      const row = document.getElementById('error-' + idx)
+      if (row) {
+        const isHidden = row.style.display === 'none' || row.style.display === ''
+        row.style.display = isHidden ? 'table-row' : 'none'
+      }
+    }
+  </script>
 </body>
 </html>`
 
