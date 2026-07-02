@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA Test Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    .date { color: #666; font-size: 14px; margin-bottom: 24px; }
+    .summary {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .summary-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      flex: 1;
+      min-width: 140px;
+      text-align: center;
+    }
+    .summary-card .value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+    .summary-card .label {
+      font-size: 13px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .summary-card.total .value { color: #1a1a2e; }
+    .summary-card.passed .value { color: #22c55e; }
+    .summary-card.failed .value { color: #ef4444; }
+    .summary-card.rate .value { color: #3b82f6; }
+    .summary-card.time .value { color: #8b5cf6; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    th {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: #f8f9ff; }
+    .test-id {
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6366f1;
+    }
+    .test-desc { max-width: 400px; }
+    .status {
+      font-weight: 600;
+      text-align: center;
+    }
+    .pass .status { color: #22c55e; }
+    .fail .status { color: #ef4444; }
+    .duration {
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 13px;
+      text-align: center;
+      color: #888;
+    }
+    @media (max-width: 640px) {
+      body { padding: 12px; }
+      th, td { padding: 10px 8px; font-size: 13px; }
+      .summary-card { padding: 14px; min-width: 100px; }
+      .summary-card .value { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>QA Test Dashboard</h1>
+    <p class="date">Generated: 7/2/2026, 1:57:59 PM | Target: saucedemo.com</p>
+
+    <div class="summary">
+      <div class="summary-card total">
+        <div class="value">8</div>
+        <div class="label">Total Tests</div>
+      </div>
+      <div class="summary-card passed">
+        <div class="value">8</div>
+        <div class="label">Passed</div>
+      </div>
+      <div class="summary-card failed">
+        <div class="value">0</div>
+        <div class="label">Failed</div>
+      </div>
+      <div class="summary-card rate">
+        <div class="value">100.0%</div>
+        <div class="label">Pass Rate</div>
+      </div>
+      <div class="summary-card time">
+        <div class="value">22.5s</div>
+        <div class="label">Total Time</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Test ID</th>
+          <th>Category</th>
+          <th>Test</th>
+          <th>Status</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr class="pass">
+          <td class="test-id">M-CHK-001</td>
+          <td>Checkout</td>
+          <td class="test-desc">Add to cart updates badge number</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">2.9s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-CHK-002</td>
+          <td>Checkout</td>
+          <td class="test-desc">Full checkout flow completes successfully</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">3.1s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-INV-001</td>
+          <td>Inventory</td>
+          <td class="test-desc">Inventory page displays 6 products</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">2.8s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-INV-002</td>
+          <td>Inventory</td>
+          <td class="test-desc">Sort by price low to high returns ascending order</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">2.7s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-LOG-001</td>
+          <td>Login</td>
+          <td class="test-desc">Standard user login redirects to product page</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">2.8s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-LOG-002</td>
+          <td>Login</td>
+          <td class="test-desc">Locked-out user shows correct error message</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">2.3s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-LOG-003</td>
+          <td>Login</td>
+          <td class="test-desc">Wrong password shows generic error without leaking account existence</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">1.7s</td>
+        </tr>
+        <tr class="pass">
+          <td class="test-id">M-NAV-001</td>
+          <td>Navigation</td>
+          <td class="test-desc">Mobile menu opens and displays navigation items</td>
+          <td class="status">&#10004; PASS</td>
+          <td class="duration">4.1s</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
